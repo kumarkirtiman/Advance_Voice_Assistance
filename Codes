@@ -1,0 +1,121 @@
+import pyttsx3
+import speech_recognition as sr
+import datetime
+import wikipedia
+import webbrowser
+import os
+import pywhatkit
+
+engine = pyttsx3.init('sapi5')
+voices = engine.getProperty('voices')
+print(voices[2].id)
+engine.setProperty('voices',voices[2].id)
+
+
+def speak(audio):
+    engine.say(audio)
+    engine.runAndWait()
+
+def timezone():
+    hour=int(datetime.datetime.now().hour)
+    if hour>=0 and hour<12:
+        speak("Good Morning Sir!!")
+
+    elif hour>=12 and hour<18:
+        speak("Good afternoon Sir!!")
+
+    else:
+        speak("Good Evening!")   
+
+    speak("I am friday sir.How may i help you Sir!")  
+
+def takecommand():
+
+    r = sr.Recognizer()
+    with sr.Microphone()as source:
+        print("Listening...")
+        r.pause_threshold = 1
+        audio = r.listen(source)
+    try:
+        print("Recognizing...")    
+        query = r.recognize_google(audio, language='en-in') #Using google for voice recognition.
+        print(f"User said: {query}\n")  #User query will be printed.
+
+    except Exception as e:
+        # print(e)    
+        print("Say that again please...")   #Say that again will be printed in case of improper voice 
+        return "None" #None string will be returned
+    return query
+    
+if __name__ == "__main__":
+    timezone()
+    
+    if 1:
+        query = takecommand().lower() #Converting user query into lower case so if it recognizes in upper case.
+
+        # Logic for executing tasks based on query
+        if 'wikipedia' in query:  #if wikipedia found in the query then this block will be executed
+            speak('Searching Wikipedia...')
+            query = query.replace("wikipedia", "")
+            results = wikipedia.summary(query, sentences=2) 
+            speak("According to Wikipedia")
+            print(results)
+            speak(results)
+
+        elif 'open apple' in query:
+            webbrowser.open("apple.com")
+        elif 'open google' in query:
+            webbrowser.open("google.com")
+        elif 'open discord' in query:
+            webbrowser.open("discord.com")
+        elif 'open instagram' in query:
+            webbrowser.open("instagram.com")
+        elif 'open yahoo' in query:
+            webbrowser.open("yahoo.com")
+        elif 'open linkedin' in query:
+            webbrowser.open("linkedin.com")
+        elif 'open twitter' in query:
+            webbrowser.open("twitter.com")
+        elif 'open facebook' in query:
+            webbrowser.open("facebook.com")
+        elif 'open gmail' in query:
+            webbrowser.open("gmail.com")
+        elif 'open outlook' in query:
+            webbrowser.open("outlook.com")
+        elif 'open tatamotors' in query:
+            webbrowser.open("tatamotors.com")
+        elif 'open ford' in query:
+            webbrowser.open("ford.com")
+        elif 'open snapchat' in query:
+            webbrowser.open("snapchat.com")
+        elif 'open youtube' in query:
+            webbrowser.open("youtube.com")
+        elif 'open github' in query:
+            webbrowser.open("github.com")
+        elif 'open music' in query:         
+            music_dir = 'C:\\Users\\KIIT\Music\\Kabir Singh (2019) (320 Kbps)' #This my music Directory location
+            songs = os.listdir(music_dir)
+            print(songs)    
+            os.startfile(os.path.join(music_dir, songs[0]))
+        elif 'the time' in query:
+            strTime = datetime.datetime.now().strftime("%H:%M:%S")    
+            speak(f"Sir, the time is {strTime}")
+        elif 'open code' in query:
+            codePath = "C:\\Users\\KIIT\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe"
+            os.startfile(codePath)
+        elif 'open vlc' in query:
+            codePath = "C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe"
+            os.startfile(codePath)
+        elif 'open Betternet' in query:
+            codePath = "C:\\Program Files (x86)\\Betternet\\6.14.8.961\\Betternet.exe"
+            os.startfile(codePath)
+        elif 'open chrome' in query:
+            codePath = "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
+            os.startfile(codePath)
+        elif 'open wps' in query:
+            codePath = "C:\\Users\\KIIT\\AppData\\Local\\Kingsoft\\WPS Office\\ksolaunch.exe"
+            os.startfile(codePath)
+        elif 'play ' in query:              #If i say play and after that something it will play it on youtube.
+            song = query.replace('play', '')
+            speak('playing ' + song)
+            pywhatkit.playonyt(song)
